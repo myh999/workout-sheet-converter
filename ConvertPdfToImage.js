@@ -1,17 +1,11 @@
-const pdf = require('pdf-poppler');
-const path = require('path');
+var PDFImage = require("pdf-image").PDFImage;
 
-let sampleFile = 'SampleImages\\Image1.pdf';
-let file = sampleFile;
-let options = {
-    format: 'jpeg',
-    out_dir: path.dirname(file),
-    out_prefix: path.basename(file, path.extname(file)),
-    page: 1
-};
-
-pdf.convert(file, options).then(res => {
-    console.log('PDF Converstion Successful');
-}).catch(error => {
-    console.error(error);
+var pdfImage = new PDFImage("SampleImages/Image1.pdf", {
+    convertOptions: {
+        "-quality": "100"
+    }
+});
+pdfImage.convertPage(0).then(function(imagePath) {
+    fs.existsSync("SampleImages/Image1-0.png");
+    console.log("Conversion Successful");
 });
