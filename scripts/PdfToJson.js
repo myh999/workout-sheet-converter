@@ -21,12 +21,18 @@ const outputConfig = {
 };
 
 const features = [{type: 'DOCUMENT_TEXT_DETECTION'}];
+
+const imageContext = {
+    languageHints: ["en"]
+};
+
 const request = {
     requests: [
         {
             inputConfig: inputConfig,
             outputConfig: outputConfig,
             features: features,
+            imageContext: imageContext,
         },
     ],
 };
