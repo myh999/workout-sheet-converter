@@ -1,18 +1,16 @@
 const fs = require('fs');
-const filePath = '../SampleOutput/Image1jpgResults.json';
-const outputPath = '../SampleOutput/Image1jpgText.txt';
+const deepcopy = require('deepcopy');
+const coordinatesHelper = require('./CoordinatesHelper');
 
-var results;
+const filePath = '../SampleOutput/Image1jpgResults3.json';
 
-fs.readFile(filePath, 'utf8', function(err, data) {
-    if (err) {
-        console.log(err.stack);
-        throw err;
-    };
-    results = JSON.parse(data);
-    text = results.text;
-    fs.writeFile(outputPath, text, err => {
-        if (err) throw err;
-        console.log('Done');
-    });
-});
+const content = fs.readFileSync(filePath);
+const textJson = JSON.parse(content);
+
+initLineSegmentation(textJson);
+
+function initLineSegmentation(data) {
+    const yMax = coordinatesHelper.getYMax(data);
+    console.log("YMax: " + yMax);
+    
+}
