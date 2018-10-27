@@ -24,6 +24,10 @@ function initLineSegmentation(data) {
 
     let mergedArray = getMergedLines(lines, rawText);
 
+    coordinatesHelper.getBoundingPolygon(mergedArray);
+    coordinatesHelper.combineBoundingPolygon(mergedArray);
+
+    return constructLineWithBoundingPolygon(mergedArray);
 }
 
 function getMergedLines(lines, rawText) {
@@ -60,4 +64,41 @@ function getMergedLines(lines, rawText) {
         }
     }
     return mergedArray;
+}
+
+function constructLineWithBoundingPolygon(mergedArray) {
+    let finalArray = [];
+
+    for (let i = 0; i < mergedArray.length; i++) {
+        if (!mergedArray[i]['matched']) {
+            if (mergedArray[i]['match'].length === 0) {
+                finalArray.push(mergedArray[i].description);
+            } else {
+                finalArray.push(arrangeWordsInOrder(mergedArray, i));
+            }
+        }
+    }
+    return finalArray;
+}
+
+// TODO: Implement an insertion sort algorithm for multiple words
+function arrangeWordsInOrder(mergedArray, k) {
+    let mergedLine = '';
+    let wordArray = [];
+    let line = mergedArray[k]['match'];
+
+    for (let i = 0; i < line.length; i++) {
+        let index = line[i]['matchLineNum'];
+        let matchedWordForLine = mergedArray[index].description;
+
+        let mainX = mergedArray[k].boundingPoly.vertices[0].x;
+        let compareX = mergedArray[index].boundingPoly.vertices[0].x;
+
+        if (compareX > mainX) {
+            mergedLine = mergedArray[k].description + ' ' + matchedWordForLine;
+        } else {
+            mergedLine = matchedWordForLine + ' ' + mergedArray[k].description;
+        }
+    }
+    return mergedLine;
 }
